@@ -67,11 +67,11 @@
 			</div>
 		</div>
 	</div>
-<--hi-->
 
-	<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&disable-funding=credit"></script>
+	<script src="https://www.paypal.com/sdk/js?client-id=Aafyqpoyilo8IpEZW4HOWJBuYPqFFlINklZmuMPBmanXnmsB1fv4Liok8LDIMBC9F-ahNq_gOv_naDSC&currency=USD&disable-funding=credit"></script>
 
     <script>
+    	var total = '{{order.get_cart_total}}'
         // Render the PayPal button into #paypal-button-container
         paypal.Buttons({
         	style:{
@@ -84,7 +84,7 @@
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: '88.44'
+                            value: parseFloat(total).toFixed(2)
                         }
                     }]
                 });
@@ -93,8 +93,9 @@
             // Finalize the transaction
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
-                    // Show a success message to the buyer
                     alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                    submitFormData()
+
                 });
             }
 
@@ -107,7 +108,7 @@
 
 	<script type="text/javascript">
 		var shipping = '{{order.shipping}}'
-		var total = '{{order.get_cart_total|floatformat:2}}'
+
 
 		if (shipping == 'False'){
 		 	document.getElementById('shipping-info').innerHTML = ''
@@ -174,7 +175,7 @@
 	    	fetch(url, {
 	    		method:'POST',
 	    		headers:{
-	    			'Content-Type':'applicaiton/json',
+	    			'Content-Type':'application/json',
 	    			'X-CSRFToken':csrftoken,
 	    		},
 	    		body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo}),
